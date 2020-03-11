@@ -1,4 +1,4 @@
-package com.company;
+package com.company.Edit;
 
 public class Controller {
 }

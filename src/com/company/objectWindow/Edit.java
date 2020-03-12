@@ -1,4 +1,4 @@
-package com.company.Edit;
+package com.company.objectWindow;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,7 @@ public class Edit extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("editLayout.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("objectLayout.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();

@@ -1,4 +1,4 @@
-package com.company.Main;
+package com.company.mainWindow;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,8 +11,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("mainLayout.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setTitle("Редактор объектов");
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
     }
 

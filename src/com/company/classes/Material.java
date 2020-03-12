@@ -1,4 +1,4 @@
-package com.company.Classes;
+package com.company.classes;
 
 public enum Material {
     COPPER,

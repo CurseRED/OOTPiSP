@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="480.0" prefWidth="640.0" spacing="8.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.mainWindow.MainController">
+<VBox alignment="TOP_CENTER" prefHeight="480.0" prefWidth="640.0" spacing="8.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.mainWindow.MainController">
    <children>
       <Label text="Список объектов" textAlignment="CENTER" />
       <ListView VBox.vgrow="ALWAYS">

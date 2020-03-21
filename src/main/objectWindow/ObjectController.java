@@ -1,4 +1,4 @@
-package com.company.objectWindow;
+package main.objectWindow;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

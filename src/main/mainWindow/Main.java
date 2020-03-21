@@ -1,4 +1,4 @@
-package com.company.mainWindow;
+package main.mainWindow;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

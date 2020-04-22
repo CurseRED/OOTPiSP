@@ -1,6 +1,8 @@
-package com.company.classes;
+package main.java.classes;
 
-public class Ring extends Jewel{
+import java.io.Serializable;
+
+public class Ring extends Jewel implements Serializable {
 
     private float radius;
 

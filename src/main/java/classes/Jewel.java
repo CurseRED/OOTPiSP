@@ -1,6 +1,8 @@
-package com.company.classes;
+package main.java.classes;
 
-public class Jewel {
+import java.io.Serializable;
+
+public class Jewel implements Serializable {
 
     private String name;
     private Material material;

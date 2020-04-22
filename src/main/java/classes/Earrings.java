@@ -1,6 +1,8 @@
-package com.company.classes;
+package main.java.classes;
 
-public class Earrings extends Jewel {
+import java.io.Serializable;
+
+public class Earrings extends Jewel implements Serializable {
 
     private float size;
 

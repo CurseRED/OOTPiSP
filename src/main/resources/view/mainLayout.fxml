@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" prefHeight="480.0" prefWidth="640.0" spacing="8.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.MainController">
+   <children>
+      <Label text="Список объектов" textAlignment="CENTER" />
+      <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+        <columns>
+          <TableColumn maxWidth="-1.0" minWidth="-Infinity" prefWidth="-1.0" text="Имя" />
+          <TableColumn maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" text="Класс" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <HBox>
+         <children>
+            <HBox spacing="8.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Button fx:id="loadButton" mnemonicParsing="false" onAction="#onClickLoadButton" text="Загрузить" />
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onClickSaveButton" text="Сохранить" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" spacing="8.0">
+               <children>
+                  <ComboBox fx:id="comboBox" prefWidth="150.0" />
+                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#onClickAddButton" text="Добавить" />
+                  <Button fx:id="editButton" mnemonicParsing="false" onAction="#onClickEditButton" text="Редактировать" />
+                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onClickDeleteButton" text="Удалить" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+         </children></HBox>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+   </padding>
+</VBox>

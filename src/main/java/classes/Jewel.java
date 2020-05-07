@@ -1,14 +1,22 @@
 package main.java.classes;
 
+import jdk.jfr.Description;
+
 import java.io.Serializable;
 
+@Description("Украшение")
 public class Jewel implements Serializable {
 
-    private String name;
-    private Material material;
-    private Gem gem;
-    private int price;
-    private String owner;
+    @Description("Название")
+    protected String name;
+    @Description("Тип материала")
+    protected Material material;
+    @Description("Тип камня")
+    protected Gem gem;
+    @Description("Цена")
+    protected Integer price;
+    @Description("Имя покупателя")
+    protected String owner;
 
     public Jewel(String name, Material material, Gem gem, int price, String owner) {
         this.name = name;
@@ -67,5 +75,9 @@ public class Jewel implements Serializable {
                 ", price=" + price +
                 ", owner='" + owner + '\'' +
                 '}';
+    }
+
+    public Jewel() {
+
     }
 }

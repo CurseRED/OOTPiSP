@@ -18,13 +18,13 @@
       </TableView>
       <HBox>
          <children>
-            <HBox spacing="8.0" HBox.hgrow="ALWAYS">
+            <HBox spacing="8.0" HBox.hgrow="NEVER">
                <children>
                   <Button fx:id="loadButton" mnemonicParsing="false" onAction="#onClickLoadButton" text="Загрузить" />
                   <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onClickSaveButton" text="Сохранить" />
                </children>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" spacing="8.0">
+            <HBox alignment="CENTER_RIGHT" spacing="8.0" HBox.hgrow="ALWAYS">
                <children>
                   <ComboBox fx:id="comboBox" prefWidth="150.0" />
                   <Button fx:id="addButton" mnemonicParsing="false" onAction="#onClickAddButton" text="Добавить" />
@@ -34,6 +34,9 @@
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="8.0" />
+               </HBox.margin>
             </HBox>
          </children></HBox>
    </children>

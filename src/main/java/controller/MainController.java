@@ -124,16 +124,23 @@ public class MainController {
     }
 
     private void deleteObject() {
-        tableList.remove(tableView.getSelectionModel().getSelectedItem());
+        objectList.remove(tableView.getSelectionModel().getSelectedItem());
+        updateList();
     }
 
     private void editObject() {
-        ObjectWindow objectWindow = new ObjectWindow(stage, tableView.getSelectionModel().getSelectedItem(), this);
-        objectWindow.showObjectWindow();
+        if (tableView.getSelectionModel().getSelectedItem() != null) {
+            ObjectWindow objectWindow = new ObjectWindow(stage, tableView.getSelectionModel().getSelectedItem(), this);
+            objectWindow.showObjectWindow();
+        }
     }
 
     public void addObjectToList(ObjectInfo objectInfo) {
-        tableList.add(objectInfo);
+        objectList.add(objectInfo);
+    }
+
+    public void updateList() {
+        tableList.setAll(objectList);
     }
 
     public HashMap<String, Class<?>> getHashMap() {

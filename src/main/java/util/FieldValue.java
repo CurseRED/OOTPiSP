@@ -1,5 +1,7 @@
 package main.java.util;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -7,13 +9,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FieldValue {
 
     private Field field;
     private Node node;
-    private List<ObjectInfo> list;
+    private List<ObjectInfo> list = new ArrayList<>();
 
     public FieldValue(Field field, Node node, List<ObjectInfo> list) {
         this.field = field;
@@ -42,11 +45,14 @@ public class FieldValue {
         this.node = node;
     }
 
-    public void setField(Object o) throws IllegalAccessException {
+    public void setField(Object o) throws IllegalAccessException, NumberFormatException {
         var type = field.getType().getTypeName();
         if (type.equals("boolean") || type.equals("java.lang.Boolean")) {
             CheckBox checkBox = (CheckBox) node;
-            field.setBoolean(o, checkBox.isSelected());
+            if (type.equals("boolean"))
+                field.setBoolean(o, checkBox.isSelected());
+            else
+                field.set(o, Boolean.valueOf(checkBox.isSelected()));
         } else if (field.getType().isEnum()) {
             ComboBox<String> comboBox = (ComboBox) node;
             field.set(o, Enum.valueOf((Class<Enum>) field.getType(), comboBox.getValue()));
@@ -94,7 +100,7 @@ public class FieldValue {
                 ComboBox<String> comboBox = (ComboBox<String>) node;
                 for (var el: list)
                     if (el.getObjectName().equals(comboBox.getValue())) {
-                        field.set(o, el);
+                        field.set(o, el.getObject());
                         break;
                     }
             }
@@ -104,7 +110,7 @@ public class FieldValue {
         var type = field.getType().getTypeName();
         if (type.equals("boolean") || type.equals("java.lang.Boolean")) {
             CheckBox checkBox = (CheckBox) node;
-            checkBox.setSelected(field.getBoolean(o));
+            checkBox.setSelected((Boolean) field.get(o));
         } else if (field.getType().isEnum()) {
             ComboBox<String> comboBox = (ComboBox) node;
             comboBox.setValue(field.getType().cast(field.get(o)).toString());
@@ -149,11 +155,20 @@ public class FieldValue {
             if (type.equals("java.lang.String"))
                 textField.setText((String) field.get(o));
         } else {
-            TextField textField = (TextField) node;
+            ComboBox<String> comboBox = (ComboBox<String>) node;
+            ObservableList<String> objectInfos = FXCollections.observableArrayList();
             Class<?> clazz = field.getType();
             for (var el: list)
-                if (el.equals(field.get(o))) {
-                    textField.setText(el.getObjectName());
+                if (el.getClassName().equals(clazz))
+                    objectInfos.add(el.getObjectName());
+            comboBox.setItems(objectInfos);
+            if (o == null)
+                System.out.println("Объект равен НУЛЛ");
+            System.out.println(list);
+            System.out.println(field);
+            for (var el: list)
+                if (field.get(o) != null && field.get(o).equals(el.getObject())) {
+                    comboBox.setValue(el.getObjectName());
                     break;
                 }
         }

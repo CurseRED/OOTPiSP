@@ -89,7 +89,6 @@ public class ObjectWindow {
     private void addListeners() {
         okButton.setOnAction((event) -> {
             addNewObject();
-            stage.close();
         });
         cancelButton.setOnAction((event) -> {
             stage.close();
@@ -107,27 +106,39 @@ public class ObjectWindow {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-        if (o != null) {
+        if (o != null && !(objectName.getText().length() == 0)) {
             System.out.println("Объект создан!");
-            for (var el : list) {
-                try {
+            try {
+                for (var el : list)
                     el.setField(o);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                if (!flag) {
+                    System.out.println("Поля проинициализированы!");
+                    objectInfo = new ObjectInfo(objectName.getText(), className, o);
+                    controller.addObjectToList(objectInfo);
+                    System.out.println(objectInfo.getObjectName());
+                } else {
+                    System.out.println("Поля проинициализированы!");
+                    objectInfo.setObjectName(objectName.getText());
+                    objectInfo.setObject(o);
+                    System.out.println(objectInfo.getObjectName());
+                    System.out.println("Объект изменен!");
                 }
+                controller.updateList();
+                stage.close();
+            } catch (IllegalAccessException | NumberFormatException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Ошибка ввода!");
+                alert.setHeaderText(null);
+                alert.setContentText("Данные введены не верно!");
+                alert.showAndWait();
             }
-            if (!flag) {
-                System.out.println("Поля проинициализированы!");
-                objectInfo = new ObjectInfo(objectName.getText(), className, o);
-                controller.addObjectToList(objectInfo);
-                System.out.println(objectInfo.getObjectName());
-            } else {
-                System.out.println("Поля проинициализированы!");
-                objectInfo.setObjectName(objectName.getText());
-                objectInfo.setObject(o);
-                System.out.println(objectInfo.getObjectName());
-                System.out.println("Объект изменен!");
-            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка ввода!");
+            alert.setHeaderText(null);
+            alert.setContentText("Данные введены не верно!");
+            alert.showAndWait();
         }
     }
 
@@ -148,7 +159,10 @@ public class ObjectWindow {
                 field.setAccessible(true);
                 FieldValue fieldValue = getNodeFromFieldType(field);
                 list.add(fieldValue);
-                objectFieldHBox.getChildren().addAll(new Label(field.getAnnotation(Description.class).value() + ":"), fieldValue.getNode());
+                if (field.getAnnotation(Description.class) != null)
+                    objectFieldHBox.getChildren().addAll(new Label(field.getAnnotation(Description.class).value() + ":"), fieldValue.getNode());
+                else
+                    objectFieldHBox.getChildren().addAll(new Label(field.getName() + ": "), fieldValue.getNode());
                 root.getChildren().add(objectFieldHBox);
             }
             className = className.getSuperclass();
@@ -185,8 +199,10 @@ public class ObjectWindow {
         ComboBox<String> comboBox = new ComboBox<>();
         ObservableList<String> objectInfos = FXCollections.observableArrayList();
         for (var el: controller.getList())
-            objectInfos.add(el.getObjectName());
+            if (el.getClassName().equals(field.getType()))
+                objectInfos.add(el.getObjectName());
         comboBox.setItems(objectInfos);
-        return new FieldValue(field, comboBox);
+        System.out.println(field);
+        return new FieldValue(field, comboBox, controller.getList());
     }
 }

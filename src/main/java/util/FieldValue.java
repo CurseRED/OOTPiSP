@@ -52,7 +52,7 @@ public class FieldValue {
             if (type.equals("boolean"))
                 field.setBoolean(o, checkBox.isSelected());
             else
-                field.set(o, Boolean.valueOf(checkBox.isSelected()));
+                field.set(o, checkBox.isSelected());
         } else if (field.getType().isEnum()) {
             ComboBox<String> comboBox = (ComboBox) node;
             field.set(o, Enum.valueOf((Class<Enum>) field.getType(), comboBox.getValue()));
@@ -66,36 +66,40 @@ public class FieldValue {
                     || type.equals("java.lang.Character")
                     || type.equals("java.lang.Short")) {
                 TextField textField = (TextField) node;
+                String text = "";
+                if (!textField.getText().isEmpty())
+                    text = textField.getText();
+            System.out.println(text);
                 if (type.equals("int"))
-                    field.setInt(o, Integer.parseInt(textField.getText()));
+                    field.setInt(o, Integer.parseInt(text));
                 if (type.equals("long"))
-                    field.setLong(o, Long.parseLong(textField.getText()));
+                    field.setLong(o, Long.parseLong(text));
                 if (type.equals("byte"))
-                    field.setByte(o, Byte.parseByte(textField.getText()));
+                    field.setByte(o, Byte.parseByte(text));
                 if (type.equals("float"))
-                    field.setFloat(o, Float.parseFloat(textField.getText()));
+                    field.setFloat(o, Float.parseFloat(text));
                 if (type.equals("double"))
-                    field.setDouble(o, Double.parseDouble(textField.getText()));
+                    field.setDouble(o, Double.parseDouble(text));
                 if (type.equals("char"))
-                    field.setChar(o, textField.getText().charAt(0));
+                    field.setChar(o, text.charAt(0));
                 if (type.equals("short"))
-                    field.setShort(o, Short.parseShort(textField.getText()));
+                    field.setShort(o, Short.parseShort(text));
                 if (type.equals("java.lang.Integer"))
-                    field.set(o, Integer.parseInt(textField.getText()));
+                    field.set(o, Integer.parseInt(text));
                 if (type.equals("java.lang.Long"))
-                    field.set(o, Long.parseLong(textField.getText()));
+                    field.set(o, Long.parseLong(text));
                 if (type.equals("java.lang.Byte"))
-                    field.set(o, Byte.parseByte(textField.getText()));
+                    field.set(o, Byte.parseByte(text));
                 if (type.equals("java.lang.Float"))
-                    field.set(o, Float.parseFloat(textField.getText()));
+                    field.set(o, Float.parseFloat(text));
                 if (type.equals("java.lang.Double"))
-                    field.set(o, Double.parseDouble(textField.getText()));
+                    field.set(o, Double.parseDouble(text));
                 if (type.equals("java.lang.Character"))
-                    field.set(o, textField.getText().charAt(0));
+                    field.set(o, text.charAt(0));
                 if (type.equals("java.lang.Short"))
-                    field.set(o, Short.parseShort(textField.getText()));
+                    field.set(o, Short.parseShort(text));
                 if (type.equals("java.lang.String"))
-                    field.set(o, textField.getText());
+                    field.set(o, text);
             } else {
                 ComboBox<String> comboBox = (ComboBox<String>) node;
                 for (var el: list)

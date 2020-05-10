@@ -2,8 +2,10 @@ package main.java.classes;
 
 import jdk.jfr.Description;
 
+import java.io.Serializable;
+
 @Description("Тест")
-public class TestClass extends Jewel {
+public class TestClass extends Jewel implements Serializable {
 
     private int i;
     private Integer i1;

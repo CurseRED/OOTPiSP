@@ -2,7 +2,6 @@ package main.java.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -20,21 +19,11 @@ import java.util.List;
 
 public class MainController {
 
-    private HashMap<String, Class<?>> hashMap = new HashMap<>();
-    private List<ObjectInfo> objectList = new ArrayList<>();
-    private ObservableList<ObjectInfo> tableList = FXCollections.observableArrayList(objectList);
+    private final HashMap<String, Class<?>> hashMap = new HashMap<>();
+    private final List<ObjectInfo> objectList = new ArrayList<>();
+    private final ObservableList<ObjectInfo> tableList = FXCollections.observableArrayList(objectList);
     private Stage stage;
 
-    @FXML
-    private Button addButton;
-    @FXML
-    private Button editButton;
-    @FXML
-    private Button deleteButton;
-    @FXML
-    private Button loadButton;
-    @FXML
-    private Button saveButton;
     @FXML
     private ComboBox<String> comboBox;
     @FXML
@@ -45,29 +34,29 @@ public class MainController {
     }
 
     @FXML
-    private void onClickAddButton(ActionEvent e) {
+    private void onClickAddButton() {
         addObject();
     }
 
     @FXML
-    private void onClickEditButton(ActionEvent e) {
+    private void onClickEditButton() {
         editObject();
     }
 
     @FXML
-    private void onClickDeleteButton(ActionEvent e) {
+    private void onClickDeleteButton() {
         deleteObject();
     }
 
     @FXML
-    private void onClickLoadButton(ActionEvent e) {
-        SerializationWindow serializationWindow = new SerializationWindow(stage, SerializationMode.LOAD);
+    private void onClickLoadButton() {
+        SerializationWindow serializationWindow = new SerializationWindow(stage, SerializationMode.LOAD, this);
         serializationWindow.showSerializationWindow();
     }
 
     @FXML
-    private void onClickSaveButton(ActionEvent e) {
-        SerializationWindow serializationWindow = new SerializationWindow(stage, SerializationMode.SAVE);
+    private void onClickSaveButton() {
+        SerializationWindow serializationWindow = new SerializationWindow(stage, SerializationMode.SAVE, this);
         serializationWindow.showSerializationWindow();
     }
 
@@ -110,7 +99,10 @@ public class MainController {
                 System.out.println(packageName + className);
                 Class<?> clazz = Class.forName(packageName + className);
                 if (!(clazz.isEnum() || clazz.isInterface())) {
-                    className = clazz.getAnnotation(Description.class).value();
+                    if (clazz.getAnnotation(Description.class) != null)
+                        className = clazz.getAnnotation(Description.class).value();
+                    else
+                        className = clazz.getName();
                     list.add(className);
                 }
                 hashMap.put(className, clazz);
@@ -143,11 +135,23 @@ public class MainController {
         tableList.setAll(objectList);
     }
 
-    public HashMap<String, Class<?>> getHashMap() {
-        return hashMap;
-    }
-
     public List<ObjectInfo> getList() {
         return objectList;
+    }
+
+    public void addObjects(List<Object> list) {
+        int i = 0;
+        for (var e: list) {
+            objectList.add(new ObjectInfo("Объект " + Integer.toString(i), e.getClass(), e));
+            i++;
+        }
+        updateList();
+    }
+
+    public List<Object> getObjects() {
+        List<Object> list = new ArrayList<>();
+        for (var e: objectList)
+            list.add(e.getObject());
+        return list;
     }
 }

@@ -18,7 +18,7 @@ public class Jewel implements Serializable {
     @Description("Имя покупателя")
     protected String owner;
 
-    public Jewel(String name, Material material, Gem gem, int price, String owner) {
+    public Jewel(String name, Material material, Gem gem, Integer price, String owner) {
         this.name = name;
         this.material = material;
         this.gem = gem;
@@ -50,11 +50,11 @@ public class Jewel implements Serializable {
         this.gem = gem;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

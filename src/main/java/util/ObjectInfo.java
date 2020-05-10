@@ -13,7 +13,10 @@ public class ObjectInfo {
         this.objectName = objectName;
         this.className = className;
         this.object = object;
-        this.classNameRus = className.getAnnotation(Description.class).value();
+        if (className.getAnnotation(Description.class) != null)
+            this.classNameRus = className.getAnnotation(Description.class).value();
+        else
+            this.classNameRus = "";
     }
 
     public String getClassNameRus() {

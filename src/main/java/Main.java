@@ -21,6 +21,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         controller.initForm();
+        System.out.println(boolean.class.equals(Boolean.class));
     }
 
     public static void main(String[] args) {

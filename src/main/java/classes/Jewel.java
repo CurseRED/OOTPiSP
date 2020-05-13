@@ -3,6 +3,7 @@ package main.java.classes;
 import jdk.jfr.Description;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Description("Украшение")
 public class Jewel implements Serializable {
@@ -15,6 +16,24 @@ public class Jewel implements Serializable {
     protected Gem gem;
     @Description("Цена")
     protected Integer price;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Jewel jewel = (Jewel) o;
+        return Objects.equals(name, jewel.name) &&
+                material == jewel.material &&
+                gem == jewel.gem &&
+                Objects.equals(price, jewel.price) &&
+                Objects.equals(owner, jewel.owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, material, gem, price, owner);
+    }
+
     @Description("Имя покупателя")
     protected String owner;
 

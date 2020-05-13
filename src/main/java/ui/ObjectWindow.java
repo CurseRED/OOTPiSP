@@ -55,7 +55,7 @@ public class ObjectWindow {
         prepareStage(primaryStage);
         addListeners();
         stage.setScene(prepareScene());
-        for (var el: list) {
+        for (var el : list) {
             try {
                 el.setNode(objectInfo.getObject());
             } catch (IllegalAccessException e) {
@@ -146,7 +146,6 @@ public class ObjectWindow {
         nodes.clear();
         VBox root = new VBox(8);
         root.setPadding(new Insets(8, 8, 8, 8));
-        // Creating object name field
         objectName = new TextField();
         HBox objectNameHBox = new HBox(8);
         objectNameHBox.setAlignment(Pos.CENTER_LEFT);
@@ -198,7 +197,7 @@ public class ObjectWindow {
             return new FieldValue(field, new TextField());
         ComboBox<String> comboBox = new ComboBox<>();
         ObservableList<String> objectInfos = FXCollections.observableArrayList();
-        for (var el: controller.getList())
+        for (var el : controller.getList())
             if (el.getClassName().equals(field.getType()))
                 objectInfos.add(el.getObjectName());
         comboBox.setItems(objectInfos);

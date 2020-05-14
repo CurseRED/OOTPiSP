@@ -16,17 +16,12 @@ public class XMLSerializer implements Serializer, Serializable {
     @Override
     @Description(".xml")
     public void serialize(File file, List<Object> objectList) {
-        XMLEncoder xmlEncoder = null;
-        try{
-            xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(file)));
-        } catch(FileNotFoundException e){
-            e.printStackTrace();
-        }
-        if (xmlEncoder != null) {
+        try (XMLEncoder xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(file)))) {
             for (var o : objectList)
                 xmlEncoder.writeObject(o);
             xmlEncoder.flush();
-            xmlEncoder.close();
+        } catch(FileNotFoundException e){
+            e.printStackTrace();
         }
     }
 

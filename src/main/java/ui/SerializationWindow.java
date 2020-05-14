@@ -237,16 +237,28 @@ public class SerializationWindow {
         if (chosenFiles != null)
             for (var file : chosenFiles) {
                 try {
+                    boolean flag = false;
+                    for (var s : serializers) {
+                        Method sm = s.getMethod("serialize", File.class, List.class);
+                        if (sm.getAnnotation(Description.class)
+                                .value()
+                                .equals(file.getName().substring(file.getName().lastIndexOf('.')))) {
+                            plugClass = plugins.get(0);
+                            flag = true;
+                            break;
+                        }
+                    }
                     for (var plugin : plugins) {
                         if (plugin.getMethod("encode", File.class, String.class)
                                 .getAnnotation(Description.class)
                                 .value()
                                 .equals(file.getName().substring(file.getName().lastIndexOf('.')))) {
                             plugClass = plugin;
+                            flag = true;
                             break;
                         }
                     }
-                    if (plugClass != null) {
+                    if (flag) {
                         Plugin plugin = plugClass.getDeclaredConstructor().newInstance();
                         plugin.decode(file, keyField.getText());
                         Serializer serializer = serClass.getDeclaredConstructor().newInstance();

@@ -52,7 +52,7 @@ public class TextSerializer implements Serializer, Serializable {
 
 
     @Override
-    @Description("txt")
+    @Description(".txt")
     public void serialize(File file, List<Object> objectList) {
         try (FileWriter writer = new FileWriter(file)) {
             for (var o : objectList) {

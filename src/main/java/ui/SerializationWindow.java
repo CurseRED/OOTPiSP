@@ -26,8 +26,6 @@ import java.util.List;
 
 public class SerializationWindow {
 
-    // Key length must be 16 or 32 bytes
-    private static final String KEY = "1234567891234567";
     private final Stage stage = new Stage();
     private final ComboBox<String> serializersComboBox = new ComboBox<>();
     private final ComboBox<String> pluginsComboBox = new ComboBox<>();
@@ -46,6 +44,7 @@ public class SerializationWindow {
     private final List<String> serNames = new ArrayList<>();
     private final List<String> plugNames = new ArrayList<>();
     private final MainController controller;
+    private final TextField keyField = new TextField();
 
     public SerializationWindow(Stage primaryStage, SerializationMode mode, MainController controller) {
         this.mode = mode;
@@ -58,15 +57,14 @@ public class SerializationWindow {
     }
 
     private void loadPlugins() {
-        System.out.println(KEY.getBytes().length);
         File dir = new File("src/main/java/plugins/");
         String packageName = "main.java.plugins.";
-        for (var file : dir.listFiles()) {
-            try {
+        try {
+            plugins.add((Class<Plugin>) Class.forName("main.java.util.EmptyPlugin"));
+            for (var file : dir.listFiles())
                 plugins.add((Class<Plugin>) Class.forName(packageName + file.getName().substring(0, file.getName().indexOf("."))));
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -103,7 +101,11 @@ public class SerializationWindow {
         vBox.setPadding(new Insets(8, 8, 8, 8));
         initComboBox((List<Class<?>>)(List<?>)serializers, serNames, serializersComboBox);
         initComboBox((List<Class<?>>)(List<?>)plugins, plugNames, pluginsComboBox);
-        vBox.getChildren().addAll(new Label("Сериализаторы: "), serializersComboBox, new Label("Плагины:"), pluginsComboBox);
+        if (mode == SerializationMode.SAVE)
+            vBox.getChildren().addAll(new Label("Сериализаторы: "), serializersComboBox, new Label("Плагины:"), pluginsComboBox);
+        else
+            vBox.getChildren().addAll(new Label("Сериализаторы: "), serializersComboBox);
+        vBox.getChildren().addAll(new Label("Ключ: "), keyField);
         HBox hBox = new HBox(8);
         hBox.setAlignment(Pos.CENTER_LEFT);
         hBox.getChildren().addAll(chooseButton, label);
@@ -148,8 +150,11 @@ public class SerializationWindow {
             if (mode.equals(SerializationMode.SAVE)) {
                 try {
                     Method method = chosenSerializer.getMethod("serialize", File.class, List.class);
-                    if (method.getAnnotation(Description.class) != null)
-                        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Serialization files", "*." + method.getAnnotation(Description.class).value()));
+                    Method plugin = chosenPlugin.getMethod("encode", File.class, String.class);
+                    if (method.getAnnotation(Description.class) != null && plugin.getAnnotation(Description.class) != null)
+                        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Serialization files", "*"
+                                + method.getAnnotation(Description.class).value()
+                                + plugin.getAnnotation(Description.class).value()));
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
                 }
@@ -161,8 +166,8 @@ public class SerializationWindow {
             } else {
                 try {
                     Method method = chosenSerializer.getMethod("serialize", File.class, List.class);
-                    if (method.getAnnotation(Description.class) != null)
-                        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Deserialization files", "*." + method.getAnnotation(Description.class).value()));
+                        if (method.getAnnotation(Description.class) != null)
+                            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Deserialization files", "*"));
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
                 }
@@ -209,7 +214,7 @@ public class SerializationWindow {
                 Serializer serializer = serClass.getDeclaredConstructor().newInstance();
                 serializer.serialize(chosenFile, controller.getObjects());
                 Plugin plugin = plugClass.getDeclaredConstructor().newInstance();
-                //plugin.decode(chosenFile, KEY);
+                plugin.encode(chosenFile, keyField.getText());
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
@@ -232,17 +237,33 @@ public class SerializationWindow {
         if (chosenFiles != null)
             for (var file : chosenFiles) {
                 try {
-                    Plugin plugin = plugClass.getDeclaredConstructor().newInstance();
-                    //plugin.decode(file, KEY);
-                    Serializer serializer = serClass.getDeclaredConstructor().newInstance();
-                    controller.addObjects(serializer.deserialize(file));
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
+                    for (var plugin : plugins) {
+                        if (plugin.getMethod("encode", File.class, String.class)
+                                .getAnnotation(Description.class)
+                                .value()
+                                .equals(file.getName().substring(file.getName().lastIndexOf('.')))) {
+                            plugClass = plugin;
+                            break;
+                        }
+                    }
+                    if (plugClass != null) {
+                        Plugin plugin = plugClass.getDeclaredConstructor().newInstance();
+                        plugin.decode(file, keyField.getText());
+                        Serializer serializer = serClass.getDeclaredConstructor().newInstance();
+                        controller.addObjects(serializer.deserialize(file));
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Ошибка сериализации!");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Необходимый плагин отсутствует!");
+                        alert.showAndWait();
+                    }
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Ошибка сериализации!");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Параметры выбраны не верно!");
+                    alert.showAndWait();
                     e.printStackTrace();
                 }
             }

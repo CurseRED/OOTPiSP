@@ -36,8 +36,8 @@ public class AESEncryptionPlugin implements Plugin {
         BufferedOutputStream bos = null;
         try {
             IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(StandardCharsets.UTF_8));
-            for (int i = 0; i < 16-key.length(); i++)
-                key += " ";
+            key = formatString(key, 16);
+            System.out.println(key);
             SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
             Cipher cipher = Cipher.getInstance(METHOD);
             cipher.init(mode, secretKey, iv);
@@ -72,5 +72,18 @@ public class AESEncryptionPlugin implements Plugin {
                 }
             }
         }
+    }
+
+    protected String formatString(String str, int position) {
+        final StringBuffer buffer = new StringBuffer();
+        final int to = position - str.length();
+        if (str.length() > position)
+            buffer.append(str.substring(0, position));
+        else
+            buffer.append(str);
+        for (int i = 0; i < to; i++) {
+            buffer.append(" ");
+        }
+        return buffer.toString();
     }
 }

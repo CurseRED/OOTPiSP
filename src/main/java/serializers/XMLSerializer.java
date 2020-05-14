@@ -14,7 +14,7 @@ import java.util.List;
 public class XMLSerializer implements Serializer, Serializable {
 
     @Override
-    @Description("xml")
+    @Description(".xml")
     public void serialize(File file, List<Object> objectList) {
         XMLEncoder xmlEncoder = null;
         try{

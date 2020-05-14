@@ -1,4 +1,4 @@
-package main.java.plugins;
+package main.java.util;
 
 import jdk.jfr.Description;
 import main.java.util.Plugin;

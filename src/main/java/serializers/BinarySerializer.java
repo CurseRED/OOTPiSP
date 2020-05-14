@@ -13,7 +13,7 @@ import java.util.List;
 public class BinarySerializer implements Serializer, Serializable {
 
     @Override
-    @Description("bin")
+    @Description(".bin")
     public void serialize(File file, List<Object> objectList) {
         FileOutputStream fos = null;
         ObjectOutputStream oos = null;

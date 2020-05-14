@@ -140,7 +140,7 @@ public class MainController {
     }
 
     public void addObjects(List<Object> list) {
-        int i = 0;
+        int i = tableList.size() + 1;
         for (var e: list) {
             objectList.add(new ObjectInfo("Объект " + Integer.toString(i), e.getClass(), e));
             i++;
